@@ -4,14 +4,19 @@ from celery import shared_task
 
 import requests
 
+from django.conf import settings
+
+SLACK_CHANNEL_HOOKS = settings.SLACK_CHANNEL_HOOKS
+
 
 @shared_task
 def send_slack_message(message):
+    print(SLACK_CHANNEL_HOOKS, 'SLACK_CHANNEL_HOOKS')
 
     payload = '{"text": "%s"}' % message
 
     response = requests.post(
-        'https://hooks.slack.com/services/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',
+        SLACK_CHANNEL_HOOKS,
         data=payload
     )
     print(response.text)

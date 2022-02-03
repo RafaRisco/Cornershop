@@ -10,11 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os
-
 from datetime import timedelta
 
 from pathlib import Path
+
+import os
+import environ
+
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +36,8 @@ SECRET_KEY = 'django-insecure-1*dr7@ch#yg7*)=s9*p$g8h&_+w-48ndh$fk6$*6*%$2pvt0x0
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+SLACK_CHANNEL_HOOKS = env('SLACK_CHANNEL_HOOKS')
 
 ALLOWED_HOSTS = ['*']
 
@@ -178,6 +188,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = BASE_DIR / 'staticfile'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
@@ -192,3 +204,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+
+# CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
